@@ -1,6 +1,4 @@
-// @ts-expect-error STRICTNESS_MIGRATION --- 🚨 Unsafe legacy code 🚨 Please delete this and fix any type errors if you have time 🙏
-import { mount } from "enzyme"
-import { Theme } from "palette"
+import { renderWithWrappersTL } from "lib/tests/renderWithWrappers"
 import React from "react"
 import { RelayProp } from "react-relay"
 import { BMWEventSection } from "../index"
@@ -21,24 +19,22 @@ const show = {
 
 describe("CityEvent", () => {
   it("renders properly", () => {
-    const comp = mount(
-      <Theme>
-        <BMWEventSection
-          title="BMW Art Guide"
-          sponsoredContent={{
-            introText: "Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
-            artGuideUrl: "http://www.example.com",
-            shows: {
-              totalCount: 2,
-            },
-            featuredShows: [show as any],
-          }}
-          relay={{ environment: {} } as RelayProp}
-          citySlug={"new-york-us"}
-        />
-      </Theme>
+    const tree = renderWithWrappersTL(
+      <BMWEventSection
+        title="BMW Art Guide"
+        sponsoredContent={{
+          introText: "Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
+          artGuideUrl: "http://www.example.com",
+          shows: {
+            totalCount: 2,
+          },
+          featuredShows: [show as any],
+        }}
+        relay={{ environment: {} } as RelayProp}
+        citySlug={"new-york-us"}
+      />
     )
 
-    expect(comp.text()).toContain("BMW Art Guide")
+    expect(tree.getByText("BMW Art Guide")).toBeTruthy()
   })
 })
