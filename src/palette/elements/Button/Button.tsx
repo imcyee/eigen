@@ -44,6 +44,7 @@ export interface ButtonProps extends ButtonBaseProps {
    * to add haptic feedback on the button.
    */
   haptic?: HapticFeedbackTypes | true
+  testID?: string
 }
 
 export interface ButtonBaseProps extends BoxProps {
@@ -272,9 +273,12 @@ export const Button: React.FC<ButtonProps> = (props) => {
                     {children}
                   </Sans>
                 </VisibleTextContainer>
-                <HiddenText role="presentation" weight="medium" size={s.size}>
-                  {longestText ? longestText : children}
-                </HiddenText>
+                {!__TEST__ && (
+                  // this is used to make the button sized to fit the longest text
+                  <HiddenText role="presentation" weight="medium" size={s.size}>
+                    {longestText ? longestText : children}
+                  </HiddenText>
+                )}
 
                 {!!loading && <Spinner size={size} color={spinnerColor} />}
               </AnimatedContainer>
