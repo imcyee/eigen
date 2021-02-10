@@ -1,9 +1,10 @@
-// @ts-expect-error STRICTNESS_MIGRATION --- 🚨 Unsafe legacy code 🚨 Please delete this and fix any type errors if you have time 🙏
-import { mount } from "enzyme"
+import { fireEvent } from "@testing-library/react-native"
 import { Markdown } from "lib/Components/Markdown"
-import { Theme } from "palette"
+import { renderWithWrappersTL } from "lib/tests/renderWithWrappers"
+import { Collapse } from "palette"
 import React from "react"
-import { TouchableWithoutFeedback } from "react-native"
+import { Text, TouchableWithoutFeedback } from "react-native"
+import { act } from "react-test-renderer"
 import { HoursCollapsible } from "../HoursCollapsible"
 
 describe("HoursCollapsible", () => {
@@ -12,25 +13,18 @@ describe("HoursCollapsible", () => {
   }
 
   it("renders properly", () => {
-    const comp = mount(
-      <Theme>
-        <HoursCollapsible openingHours={hours} />
-      </Theme>
-    )
+    const tree = renderWithWrappersTL(<HoursCollapsible openingHours={hours} />)
 
-    expect(comp.text()).toContain("Opening hours")
+    expect(tree.getByText("Opening hours")).toBeTruthy()
+    expect(tree.UNSAFE_getByType(Collapse).props.open).toBe(false)
   })
 
   it("expands when pressed", () => {
-    const comp = mount(
-      <Theme>
-        <HoursCollapsible openingHours={hours} />
-      </Theme>
-    )
+    const tree = renderWithWrappersTL(<HoursCollapsible openingHours={hours} />)
 
-    comp.find(TouchableWithoutFeedback).props().onPress()
+    fireEvent.press(tree.UNSAFE_getByType(TouchableWithoutFeedback))
 
-    expect(comp.text()).toContain(hours.text)
+    expect(tree.UNSAFE_getByType(Collapse).props.open).toBe(true)
   })
 
   it("renders markdown", () => {
@@ -38,16 +32,10 @@ describe("HoursCollapsible", () => {
       text: "**Collectors Preview**\r\nNovember 8 Thursday 14:00 to 20:00\r\n [November 9th](http://foo.bar)",
     }
 
-    const comp = mount(
-      <Theme>
-        <HoursCollapsible openingHours={markdownHours} />
-      </Theme>
-    )
+    const tree = renderWithWrappersTL(<HoursCollapsible openingHours={markdownHours} />)
 
-    comp.find(TouchableWithoutFeedback).props().onPress()
+    fireEvent.press(tree.UNSAFE_getByType(TouchableWithoutFeedback))
 
-    comp.update()
-
-    expect(comp.find(Markdown).length).toEqual(1)
+    expect(tree.UNSAFE_getAllByType(Markdown)).toHaveLength(1)
   })
 })
