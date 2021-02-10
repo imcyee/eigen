@@ -1,12 +1,30 @@
+import { render } from "@testing-library/react-native"
 import { GlobalStoreProvider } from "lib/store/GlobalStore"
 import { Theme } from "palette"
 import React from "react"
 import ReactTestRenderer from "react-test-renderer"
 import { ReactElement } from "simple-markdown"
 
+export const Wrappers: React.FC = ({ children }) => {
+  return (
+    <GlobalStoreProvider>
+      <Theme>{children}</Theme>
+    </GlobalStoreProvider>
+  )
+}
+
+/**
+ * Returns given component wrapped with our page wrappers
+ * @param component
+ */
+export const componentWithWrappers = (component: ReactElement) => {
+  return <Wrappers>{component}</Wrappers>
+}
+
 /**
  * Renders a React Component with our page wrappers
  * @param component
+ * @deprecated Try to use `renderWithWrappersTL`. If there is any problem and this function works, please report it to CX.
  */
 export const renderWithWrappers = (component: ReactElement) => {
   const wrappedComponent = componentWithWrappers(component)
@@ -36,13 +54,9 @@ export const renderWithWrappers = (component: ReactElement) => {
 }
 
 /**
- * Returns given component wrapped with our page wrappers
+ * Renders a React Component with our page wrappers
  * @param component
  */
-export const componentWithWrappers = (component: ReactElement) => {
-  return (
-    <GlobalStoreProvider>
-      <Theme>{component}</Theme>
-    </GlobalStoreProvider>
-  )
+export const renderWithWrappersTL = (component: ReactElement) => {
+  return render(component, { wrapper: Wrappers })
 }
