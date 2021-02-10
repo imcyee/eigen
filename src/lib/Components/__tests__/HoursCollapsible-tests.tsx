@@ -3,8 +3,7 @@ import { Markdown } from "lib/Components/Markdown"
 import { renderWithWrappersTL } from "lib/tests/renderWithWrappers"
 import { Collapse } from "palette"
 import React from "react"
-import { Text, TouchableWithoutFeedback } from "react-native"
-import { act } from "react-test-renderer"
+import { TouchableWithoutFeedback } from "react-native"
 import { HoursCollapsible } from "../HoursCollapsible"
 
 describe("HoursCollapsible", () => {
