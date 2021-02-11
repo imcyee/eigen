@@ -44,7 +44,6 @@ export interface ButtonProps extends ButtonBaseProps {
    * to add haptic feedback on the button.
    */
   haptic?: HapticFeedbackTypes | true
-  testID?: string
 }
 
 export interface ButtonBaseProps extends BoxProps {
