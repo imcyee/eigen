@@ -1,5 +1,7 @@
 import { render } from "@testing-library/react-native"
+import { ToastProvider } from "lib/Components/Toast/toastHook"
 import { GlobalStoreProvider } from "lib/store/GlobalStore"
+import { ProvideScreenDimensions } from "lib/utils/useScreenDimensions"
 import { Theme } from "palette"
 import React from "react"
 import ReactTestRenderer from "react-test-renderer"
@@ -8,7 +10,11 @@ import { ReactElement } from "simple-markdown"
 export const Wrappers: React.FC = ({ children }) => {
   return (
     <GlobalStoreProvider>
-      <Theme>{children}</Theme>
+      <Theme>
+        <ToastProvider>
+          <ProvideScreenDimensions>{children}</ProvideScreenDimensions>
+        </ToastProvider>
+      </Theme>
     </GlobalStoreProvider>
   )
 }
